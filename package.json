@@ -1,6 +1,6 @@
 {
-  "name": "butter-base-streamer",
-  "version": "0.0.2",
+  "name": "butter-streamer",
+  "version": "0.1.0",
   "description": "Base class for Butter Streamers",
   "main": "index.js",
   "scripts": {
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/butterstreamers/butter-base-streamer.git"
+    "url": "git+https://github.com/butterstreamers/butter-streamer.git"
   },
   "keywords": [
     "base",
@@ -17,17 +17,18 @@
     "butter",
     "project"
   ],
-  "author": "XeonCore",
+  "author": "Niv Sardi <x@btn.sh>",
   "license": "GPL-3.0",
   "bugs": {
-    "url": "https://github.com/butterstreamers/butter-base-streamer/issues"
+    "url": "https://github.com/butterstreamers/butter-streamer/issues"
   },
-  "homepage": "https://github.com/butterstreamers/butter-base-streamer#readme",
+  "homepage": "https://github.com/butterstreamers/butter-streamer#readme",
   "dependencies": {
-    "extend": "^3.0.0",
     "progress-stream": "^1.2.0",
-    "standard": "^11.0.1",
     "stream": "0.0.2",
     "streamify": "^0.2.5"
+  },
+  "devDependencies": {
+    "standard": "^11.0.1"
   }
 }

@@ -31,8 +31,13 @@ class HttpStreamer extends Streamer {
   }
 }
 
+Streamer.config = config
+
 module.exports = HttpStreamer
 ```
 
 that's all you *need* to do, but to do anything usefull you probably want
 to keep reading
+
+you probably want to implement 3 things, the `config` object, the
+object `constructor`, and the `seek` method

@@ -1,8 +1,9 @@
 const PassThrough = require('stream').PassThrough
 const streamify = require('streamify')
 const progressStream = require('progress-stream')
+const debug = require('debug')('butter-streamer')
 
-const parseArgs = (uri) {
+const parseArgs = (uri) => {
   const [name, args] = uri.split('?')
   const parsed = { name }
 
@@ -10,7 +11,7 @@ const parseArgs = (uri) {
     args.split('&').map(v => {
       const [ key, value ] = v.split('=')
 
-      parsed[key] =  return JSON.parse(arg)
+      parsed[key] = JSON.parse(arg)
     })
   }
 
@@ -61,29 +62,29 @@ class Streamer extends PassThrough {
   }
 
   reset(inputStream, info) {
+    debug('reset', info)
     this.info = Object.assign({}, this.info, info)
 
     if (info.length) {
       this._progress.setLength(info.length)
     }
 
-    this.unresolve()
-    this.resolve(inputStream)
+    this.close()
+    this.open(inputStream)
   }
 
-  resolve(inputStream) {
+  open(inputStream) {
     this._streamify.resolve(inputStream)
   }
 
-  unresolve() {
+  close() {
     this._streamify.unresolve()
   }
 
   ready (inputStream, info) {
     this._ready = true
-
     this.reset(inputStream, info)
-
+    debug('ready')
     this.emit('ready', this.info)
   }
 

@@ -81,7 +81,9 @@ class Streamer extends PassThrough {
   }
 
   destroy () {
-    // Virtual function, implemented in child
+    if (this._destroyed) throw new ReferenceError('Streamer already destroyed')
+    this.close()
+    this._destroyed = true
   }
 }
 

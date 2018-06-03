@@ -34,7 +34,7 @@ class Streamer extends PassThrough {
     this._streamify.pipe(this._progress).pipe(this)
   }
 
-  handleProgress(progress) {
+  handleProgress (progress) {
     this.stats = {
       downloaded: progress.transferred,
       progress: progress.percentage,
@@ -49,7 +49,7 @@ class Streamer extends PassThrough {
     }
   }
 
-  reset(inputStream, info) {
+  reset (inputStream, info) {
     debug('reset', info)
     this.info = Object.assign({}, this.info, info)
 
@@ -61,11 +61,11 @@ class Streamer extends PassThrough {
     this.open(inputStream)
   }
 
-  open(inputStream) {
+  open (inputStream) {
     this._streamify.resolve(inputStream)
   }
 
-  close() {
+  close () {
     this._streamify.unresolve()
   }
 

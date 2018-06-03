@@ -4,7 +4,7 @@
   "description": "Base class for Butter Streamers",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "mocha tests/*.js",
     "lint": "standard --env mocha"
   },
   "repository": {
@@ -29,6 +29,7 @@
     "streamify": "^0.2.5"
   },
   "devDependencies": {
+    "mocha": "^5.2.0",
     "standard": "^11.0.1"
   }
 }

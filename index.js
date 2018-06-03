@@ -3,20 +3,7 @@ const streamify = require('streamify')
 const progressStream = require('progress-stream')
 const debug = require('debug')('butter-streamer')
 
-const parseArgs = (uri) => {
-  const [name, args] = uri.split('?')
-  const parsed = { name }
-
-  if (args) {
-    args.split('&').map(v => {
-      const [ key, value ] = v.split('=')
-
-      parsed[key] = JSON.parse(arg)
-    })
-  }
-
-  return parsed
-}
+const parseArgs = require('./parse')
 
 class Streamer extends PassThrough {
   constructor (options = {}) {
@@ -57,6 +44,7 @@ class Streamer extends PassThrough {
 
     this.emit('progress', this.stats)
     if (this.stats.progress === 100) {
+      debug('complete', this.stats)
       this.emit('complete', this.stats)
     }
   }

@@ -2,7 +2,7 @@ const debug = require('debug')('butter-streamer:parse')
 
 const sepMap = {
   '\'': '\'',
-  '\"': '\"',
+  '"': '"',
   '{': '}',
   '[': ']',
   '(': ')',
@@ -23,7 +23,7 @@ const parseArgs = (uri) => {
 
         switch (osep) {
           case '\'':
-          case '\"':
+          case '"':
             parsed[key] = value
             break
           case '{':
@@ -32,7 +32,8 @@ const parseArgs = (uri) => {
             parsed[key] = JSON.parse(`${osep}${value}${csep}`)
         }
       } catch (e) {
-        debug('ERROR: could not parse malformed arg: \"', arg, '\",', osep, csep, ', skipping, error was:', e)
+        debug('ERROR: could not parse malformed arg: "', arg, '",',
+          osep, csep, ', skipping, error was:', e)
       }
     })
   }

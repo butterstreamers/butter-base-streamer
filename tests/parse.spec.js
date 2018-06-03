@@ -11,7 +11,7 @@ const runAll = () => {
     })
 
     it('should parse strings', done => {
-      const parsed = parseArgs('test?string=\"hello world\"')
+      const parsed = parseArgs('test?string="hello world"')
 
       assert(parsed.name === 'test')
       assert(parsed.string === 'hello world')
@@ -19,7 +19,7 @@ const runAll = () => {
     })
 
     it('should parse objects', done => {
-      const parsed = parseArgs('test?object={\"key\": \"value\"}')
+      const parsed = parseArgs('test?object={"key": "value"}')
 
       assert(parsed.name === 'test')
       assert(parsed.object.key === 'value')
@@ -27,7 +27,7 @@ const runAll = () => {
     })
 
     it('should parse arrays', done => {
-      const parsed = parseArgs('test?array=[\"one\", 2, null]')
+      const parsed = parseArgs('test?array=["one", 2, null]')
 
       assert(parsed.name === 'test')
       assert(parsed.array[0] === 'one')
@@ -44,7 +44,7 @@ const runAll = () => {
     })
 
     it('should parse a combination of strings, arrays and objects', done => {
-      const parsed = parseArgs('test?object={\"key\": \"value\"}&string=\"hello world\"&array=[\"one\", 2, null]')
+      const parsed = parseArgs('test?object={"key": "value"}&string="hello world"&array=["one", 2, null]')
 
       assert(parsed.name === 'test')
       assert(parsed.string === 'hello world')

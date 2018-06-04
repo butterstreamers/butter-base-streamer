@@ -6,11 +6,12 @@ const debug = require('debug')('butter-streamer')
 const parseArgs = require('./parse')
 
 class Streamer extends PassThrough {
-  constructor (options = {}, config = {}) {
+  constructor (source, options = {}, config = {}) {
     super()
 
     this.config = config
     this.options = options
+    this.source = source
 
     this.progressOptions = {
       // Hack to allow people to pass the default in for time
@@ -22,6 +23,7 @@ class Streamer extends PassThrough {
 
     this._destroyed = false
     this._ready = false
+    this.ready = this.ready.bind(this)
 
     this.stats = {
       downloaded: 0,
@@ -34,6 +36,10 @@ class Streamer extends PassThrough {
     this._progress.on('progress', this.handleProgress)
     this._streamify = streamify(options.streamify)
     this._streamify.pipe(this._progress).pipe(this)
+
+    this.createStream(source)
+        .then(this.ready)
+        .catch(e => debug('ERROR', e))
   }
 
   handleProgress (progress) {
@@ -52,39 +58,64 @@ class Streamer extends PassThrough {
     }
   }
 
-  reset (inputStream, length) {
+  _reset (inputStream, length) {
     debug('reset', length)
 
-    this.close()
-    this.open(inputStream)
+    this._streamify.unresolve()
+    this._streamify.resolve(inputStream)
+
+    this.inputStream = inputStream
 
     if (length) {
+      this.length = length
       this._progress.setLength(length)
     }
   }
 
-  open (inputStream) {
-    this._streamify.resolve(inputStream)
-  }
-
-  close () {
-    this._streamify.unresolve()
-  }
-
-  ready (inputStream, length) {
-    this._ready = true
-    this.reset(inputStream, length)
+  ready ({stream, length}) {
+    this._reset(stream, length)
     debug('ready')
-    this.emit('ready', length)
+    if (! this._ready) {
+      this._ready = true
+      this.emit('ready', length)
+    }
   }
 
-  seek (start, end) {
-    // Virtual function, implemented in child
+  seek (start = 0, end) {
+    if (this._destroyed) throw new ReferenceError('Streamer already destroyed')
+    if (!this._ready) throw new Error('Streamer not ready')
+
+    const opts = Object.assign({
+      start: start
+    }, end ? {end}: null)
+
+    debug('seek', opts)
+    this.createStream(this.source, opts)
+                       .then(this.ready)
+                       .catch(e => debug('ERROR', e))
   }
 
   destroy () {
     if (this._destroyed) throw new ReferenceError('Streamer already destroyed')
-    this.close()
+
+    if (this.inputStream) {
+      this.inputStream.pause()
+    }
+    if (this._progress) {
+      this._progress.pause()
+    }
+    this.pause()
+
+    this._streamify.unresolve()
+
+    if (this._progress) {
+      this._progress.destroy()
+    }
+    if (this.inputStream) {
+      this.inputStream.destroy()
+    }
+    super.destroy()
+    
     this._destroyed = true
   }
 }

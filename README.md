@@ -53,7 +53,7 @@ it has the following shape
 ```js
 const config = {
   name: String,                /* human readable name */
-  protocol: RegEXp | String ,  /* Regular Expression or string to be matched
+  protocol: RegEXp | String ,  /* Regular Expression or string to be matched 
                                   against the protocol part */
   suffix: RegExp | String,     /* Regular Expression or string to be matched
                                   against the uri part */

@@ -37,9 +37,9 @@ class Streamer extends PassThrough {
     this._streamify = streamify(options.streamify)
     this._streamify.pipe(this._progress).pipe(this)
 
-    this.createStream(source)
-        .then(this.ready)
-        .catch(e => debug('ERROR', e))
+    setTimeout(() => this.createStream(source) /* HACK allow child constructor to finish */
+                          .then(this.ready)
+                          .catch(e => debug('ERROR', e)))
   }
 
   handleProgress (progress) {

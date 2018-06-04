@@ -97,8 +97,14 @@ class Streamer extends PassThrough {
                        .catch(e => debug('ERROR', e))
   }
 
+  close () {
+    this._streamify.unresolve()
+  }
+
   destroy () {
     if (this._destroyed) throw new ReferenceError('Streamer already destroyed')
+
+    this.pause()
 
     if (this.inputStream) {
       this.inputStream.pause()
@@ -106,9 +112,8 @@ class Streamer extends PassThrough {
     if (this._progress) {
       this._progress.pause()
     }
-    this.pause()
 
-    this._streamify.unresolve()
+    this.close()
 
     if (this._progress) {
       this._progress.destroy && this._progress.destroy()

@@ -72,12 +72,14 @@ class Streamer extends PassThrough {
     }
   }
 
-  ready ({stream, length}) {
-    this._reset(stream, length)
+  ready ({stream, file}) {
+    this.info = Object.assign({}, this.info, file)
+
+    this._reset(stream, file.length)
     debug('ready')
     if (! this._ready) {
       this._ready = true
-      this.emit('ready', length)
+      this.emit('ready', file)
     }
   }
 

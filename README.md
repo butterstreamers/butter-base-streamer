@@ -108,11 +108,19 @@ it should return Promise that resolves to an object with the following shape
 ```js
 const createStreamObject = {
     stream: Stream:Object /* (eventually seeked to the opts values) */,
-    length: Integer       /* exected data length, this is used to calculate
-                             progress */
+    file:   File:Object   /* a file object see below */
 }
 ```
 
+The file Object has the following shape:
+```js
+const FileObject = {
+    length: Number  /* size in bytes of this file */
+    type:   String  /* mime type for this file */
+    name:   String  /* a naming suggestion for this file, should be unique
+                       by file */
+}
+```
 
 for instance:
 ```js

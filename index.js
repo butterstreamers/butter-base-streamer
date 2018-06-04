@@ -56,12 +56,12 @@ class Streamer extends PassThrough {
     debug('reset', info)
     this.info = Object.assign({}, this.info, info)
 
+    this.close()
+    this.open(inputStream)
+
     if (info.length) {
       this._progress.setLength(info.length)
     }
-
-    this.close()
-    this.open(inputStream)
   }
 
   open (inputStream) {

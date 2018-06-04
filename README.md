@@ -27,7 +27,7 @@ const config = {
 /* -- HTTP Streamer -- */
 class HttpStreamer extends Streamer {
   constructor (source, options = {}) {
-    super(options, config)
+    super(source, options, config)
   }
 }
 
@@ -40,7 +40,7 @@ that's all you *need* to do, but to do anything usefull you probably want
 to keep reading
 
 you probably want to implement 3 things, the `config` object, the
-object `constructor`, and the `seek` method
+object `constructor`, and the `createStream` method
 
 config object
 ==
@@ -92,20 +92,60 @@ simple you should do a few things though:
 		})
 ```
 
-seek method
+don't forget to attach it to your instance object before exporting !
+
+```js
+FileStreamer.config = config
+module.exports = FileStreamer
+```
+
+createStream method
 ==
 
-The `seek` method has the signature `seek(Number:start, Number:end)`, it
-should call `reset` that has the same signature as `ready` (we don't call
-`ready` here so that you can listen to `ready` and not get notified on every
-seek)
+The `createStream` method has the signature
+`Promise createStream(source:String, opts:Object{start:Number, end:Number})`
+it should return Promise that resolves to an object with the following shape
+```js
+const createStreamObject = {
+    stream: Stream:Object /* (eventually seeked to the opts values) */,
+    length: Integer       /* exected data length, this is used to calculate
+                             progress */
+}
+```
+
 
 for instance:
 ```js
-	seek (start = 0, end) {
-		this._fileStream = fs.createReadStream(this._source, {start: start, end: end})
-		this.reset(this._fileStream, this.stats.size - start)
-  }
+	createStream (source, opts) {
+        return Promise.resolve({
+                stream: fs.createReadStream(source, opts),
+                length: this.length - opts ? opts.start : 0
+            }
+		))
+	}
 ```
 
-you should do the `source` house keeping.
+note that in the real word we actually call stat to get length:
+```js
+	createStream (source, opts) {
+		return new Promise ((accept, reject) => (
+			fs.stat(source, (err, stats) => {
+				if (err) reject(err)
+				accept({
+					stream: fs.createReadStream(source, opts),
+					length: stats.size - opts.start
+				})
+			})
+		))
+
+	}
+```
+
+the `source` housekeeping is done by this library
+
+destroy
+==
+
+we will destroy the `stream` passed by `createStream` for you, but if you
+need to do more cleaning, you can implement the `destroy()` method, please
+don't forget to call `super.destroy()` when you're done

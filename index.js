@@ -6,8 +6,10 @@ const debug = require('debug')('butter-streamer')
 const parseArgs = require('./parse')
 
 class Streamer extends PassThrough {
-  constructor (options = {}) {
+  constructor (options = {}, config = {}) {
     super()
+
+    this.config = config
 
     this.progressOptions = {
       // Hack to allow people to pass the default in for time

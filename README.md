@@ -1,5 +1,7 @@
 butter-streamer: base class for all butter-streamers
 ===
+![Butter Streamers](https://avatars0.githubusercontent.com/u/17933007?v=3&s=252 "logo")
+![Travis Build](https://api.travis-ci.org/butterstreamers/butter-streamer.svg?branch=master "build")
 
 a `butter-streamer` is a component that will handle streaming trough
 https://github.com/butterstreamers/butter-stream-server to a butter app. The

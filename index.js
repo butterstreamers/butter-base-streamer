@@ -109,13 +109,13 @@ class Streamer extends PassThrough {
     this._streamify.unresolve()
 
     if (this._progress) {
-      this._progress.destroy()
+      this._progress.destroy && this._progress.destroy()
     }
     if (this.inputStream) {
       this.inputStream.destroy()
     }
     super.destroy()
-    
+
     this._destroyed = true
   }
 }

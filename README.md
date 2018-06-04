@@ -27,7 +27,6 @@ class HttpStreamer extends Streamer {
   constructor (source, options = {}) {
     super(options)
     this.config = config
-
   }
 }
 
@@ -41,3 +40,12 @@ to keep reading
 
 you probably want to implement 3 things, the `config` object, the
 object `constructor`, and the `seek` method
+
+config object
+==
+
+object constructor
+==
+
+seek method
+==

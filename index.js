@@ -44,6 +44,7 @@ class Streamer extends PassThrough {
       eta: progress.eta || Infinity
     }
 
+    debug('progress', this.stats)
     this.emit('progress', this.stats)
     if (this.stats.progress === 100) {
       debug('complete', this.stats)

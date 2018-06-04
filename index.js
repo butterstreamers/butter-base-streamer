@@ -10,6 +10,7 @@ class Streamer extends PassThrough {
     super()
 
     this.config = config
+    this.options = options
 
     this.progressOptions = {
       // Hack to allow people to pass the default in for time
@@ -22,7 +23,6 @@ class Streamer extends PassThrough {
     this._destroyed = false
     this._ready = false
 
-    this.info = {}
     this.stats = {
       downloaded: 0,
       progress: 0,
@@ -52,15 +52,14 @@ class Streamer extends PassThrough {
     }
   }
 
-  reset (inputStream, info) {
-    debug('reset', info)
-    this.info = Object.assign({}, this.info, info)
+  reset (inputStream, length) {
+    debug('reset', length)
 
     this.close()
     this.open(inputStream)
 
-    if (info.length) {
-      this._progress.setLength(info.length)
+    if (length) {
+      this._progress.setLength(length)
     }
   }
 
@@ -72,11 +71,11 @@ class Streamer extends PassThrough {
     this._streamify.unresolve()
   }
 
-  ready (inputStream, info) {
+  ready (inputStream, length) {
     this._ready = true
-    this.reset(inputStream, info)
+    this.reset(inputStream, length)
     debug('ready')
-    this.emit('ready', this.info)
+    this.emit('ready', length)
   }
 
   seek (start, end) {

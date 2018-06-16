@@ -16,6 +16,7 @@ class Streamer extends EventEmitter {
     }
 
     filesReady(files) {
+        debug('files ready', files.map(f => f.name))
         this.ready = true
         this.files = files
 
@@ -23,7 +24,8 @@ class Streamer extends EventEmitter {
     }
 
     destroy() {
-        this.files.map(file => file.destroy && file.destroy())
+        this.files && this.files.map(file => file.destroy && file.destroy())
+        this.files = null
     }
 }
 
